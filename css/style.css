@@ -162,6 +162,7 @@ body{font-family:'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helve
 .product-modal.pm-closing{opacity:0;transform:translate(-50%,-46%) scale(.98)}
 .product-modal{opacity:0;transform:translate(-50%,-46%) scale(.98);transition:opacity .22s cubic-bezier(.2,.9,.2,1),transform .22s cubic-bezier(.2,.9,.2,1)}
 .product-modal .pm-close{
+  color:var(--accent-start, #ff6b6b);
   position: absolute;
   right: 10px;
   top: 8px;
@@ -175,7 +176,10 @@ body{font-family:'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helve
 .product-modal .pm-image img{width:100%;height:auto;border-radius:8px}
 .product-modal .pm-info{flex:1;min-width:0}
 .product-modal .pm-info h2{margin:0 0 8px;font-size:1.35rem}
-.product-modal .pm-price{color:var(--accent-start, #ff6b6b);font-weight:700;margin-bottom:10px}
+.product-modal .pm-price{
+  color:var(--accent-start, #ff6b6b);
+  font-weight:700;
+  margin-bottom:10px}
 .product-modal .pm-desc{margin:6px 0 12px;color:var(--muted)}
 .product-modal .pm-meta{list-style:none;padding:0;margin:0 0 12px}
 .product-modal .pm-meta li{font-size:13px;color:var(--muted);margin-bottom:6px}
