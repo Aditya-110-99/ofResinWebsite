@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact — OfRESIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html">OfRESIN</a>
+      <button id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">☰</button>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌓</button>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="contact.html">Contact</a>
+        <a href="products.html#cart" class="cart-link">Cart (<span id="cart-count-2">0</span>)</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Contact & Custom Orders</h1>
+    <p>For custom orders, DM on WhatsApp or fill the form below.</p>
+
+    <div class="contact-wrap">
+      <div class="contact-info">
+        <h3>WhatsApp</h3>
+        <p><a href="https://wa.me/919012338933" target="_blank">+91 90123 38933</a></p>
+
+        <h3>Email</h3>
+        <p><a href="mailto:ofresin@example.com">ofresin@example.com</a></p>
+
+        <h3>Address (optional)</h3>
+        <p>Dehradun, Uttarakhand, India</p>
+      </div>
+
+      <form id="contact-form" class="contact-form">
+        <label>Name<br><input type="text" id="contact-name" required></label>
+        <label>Message<br><textarea id="contact-message" rows="4" required></textarea></label>
+        <button type="submit" class="btn btn-primary">Send</button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; OfRESIN</p>
+      <div style="margin-top:10px">
+        <button id="export-analytics" class="btn" style="padding:8px 10px;font-size:13px">Export Analytics</button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('contact-name').value.trim();
+      const msg = document.getElementById('contact-message').value.trim();
+      const phone = '919012338933';
+      const text = `Contact from website:\nName: ${name}\nMessage: ${msg}`;
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    });
+  </script>
+</body>
+</html>

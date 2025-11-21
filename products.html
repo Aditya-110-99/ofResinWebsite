@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Products — OfRESIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html">OfRESIN</a>
+      <button id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">☰</button>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌓</button>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="contact.html">Contact</a>
+        <a href="#cart" class="cart-link">Cart (<span id="cart-count-2">0</span>)</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Our Creations</h1>
+    <p class="lead">Handmade, customizable, and one-of-a-kind resin items.</p>
+
+    <div class="products-grid" id="products-grid">
+      <!-- JS will inject product cards here -->
+    </div>
+
+    <section id="cart" class="cart-section">
+      <h2>Your Cart</h2>
+      <div id="cart-items"></div>
+      <div class="cart-summary">
+        <div>Total: <span id="cart-total">₹0</span></div>
+        <div class="cart-actions">
+          <button id="clear-cart" class="btn">Clear Cart</button>
+          <button id="buy-whatsapp" class="btn btn-primary">Buy on WhatsApp</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; OfRESIN</p>
+      <p>WhatsApp: <a href="https://wa.me/919012338933" target="_blank">+91 90123 38933</a></p>
+    </div>
+  </footer>
+
+
+  <script src="js/main.js"></script>
+      <div style="margin-top:10px">
+        <button id="export-analytics" class="btn" style="padding:8px 10px;font-size:13px">Export analytics</button>
+      </div>
+</body>
+</html>
