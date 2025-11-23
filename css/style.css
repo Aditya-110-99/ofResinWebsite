@@ -424,7 +424,12 @@ img, .product-card img, .cart-img, .hero .parallax-bg, .hero .parallax-mid{ max-
 .snake-text span:nth-child(10) { animation-delay: 0.9s; }
 .snake-text span:nth-child(11) { animation-delay: 1s; }
 
+
+
+
+
 @keyframes snake {
   0%, 20%, 100% { text-shadow: 0 0 5px #fff; color: #fff; }
-  50% { color: #b709ce; text-shadow: 0 0 20px #ff0, 0 0 30px #b709ce; }
+  50% { 
+    color: #b709ce; text-shadow: 0 0 20px #ff0, 0 0 30px #b709ce; }
 }
