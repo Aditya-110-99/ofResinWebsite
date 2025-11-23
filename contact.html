@@ -1,15 +1,19 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Contact — OfRESIN</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
 </head>
+
 <body>
   <header class="site-header">
     <div class="container">
@@ -47,6 +51,16 @@
         <button type="submit" class="btn btn-primary">Send</button>
       </form>
     </div>
+
+    <section class="map-section">
+      <h2>Our Location</h2>
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3445.0200440875738!2d78.0585804!3d30.293491!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3909291d0ce98a0b%3A0x1ce65cace6fc5ccc!2sOfResin!5e0!3m2!1sen!2sin!4v1763897727038!5m2!1sen!2sin"
+          width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -59,7 +73,7 @@
 
   <script src="js/main.js"></script>
   <script>
-    document.getElementById('contact-form').addEventListener('submit', function(e){
+    document.getElementById('contact-form').addEventListener('submit', function (e) {
       e.preventDefault();
       const name = document.getElementById('contact-name').value.trim();
       const msg = document.getElementById('contact-message').value.trim();
@@ -70,4 +84,5 @@
     });
   </script>
 </body>
+
 </html>
