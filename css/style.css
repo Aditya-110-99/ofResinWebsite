@@ -299,7 +299,7 @@ body {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('../images/hero.svg'), linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.02));
+  /*background-image: url('../images/hero.svg'), linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.02));*/
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -307,18 +307,42 @@ body {
   will-change: transform
 }
 
+/* Parallax mid slider wrapper */
 .hero .parallax-mid {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background-image: url('../images/hero-mid.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
   opacity: 0.55;
   transform: translate3d(0, 0, 0);
-  will-change: transform
+  will-change: transform;
 }
+
+/* Slider inside parallax-mid */
+.hero .parallax-mid .slider {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero .parallax-mid .slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.hero .parallax-mid .slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.hero .parallax-mid .slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 
 .hero .container {
   position: relative;

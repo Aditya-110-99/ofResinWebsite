@@ -4,9 +4,30 @@
    SETTINGS
 ---------------------------------------*/
 
+
+
 // Replace with your WhatsApp phone (country code + number)
 const WHATSAPP_PHONE = '919012338933';
 
+// Hero slider inside parallax-mid
+(function() {
+  const slides = document.querySelectorAll('.parallax-mid .slide');
+  if (!slides.length) return;
+
+  let currentSlide = 0;
+
+  function showSlide(index) {
+    slides.forEach(slide => slide.classList.remove('active'));
+    slides[index].classList.add('active');
+  }
+
+  showSlide(currentSlide);
+
+  setInterval(() => {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }, 4000); // change slide every 4 seconds
+})();
 
 
 /* --------------------------------------
@@ -177,6 +198,8 @@ function trackEvent(name, payload) {
     // helpful console debug
     if (window.console && console.debug) console.debug('[analytics]', name, payload || '');
 }
+
+
 
 function exportAnalytics() {
     const a = loadAnalytics();
