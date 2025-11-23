@@ -27,8 +27,31 @@
   </header>
 
   <main class="container">
-    <h1>Our Creations</h1>
-    <p class="lead">Handmade, customizable, and one-of-a-kind resin items.</p>
+    
+    <div class="product-controls">
+  <div class="sort-filter">
+    <label for="sort-products">Sort by:</label>
+    <div class="custom-select-wrapper">
+      <select id="sort-products">
+        <option value="default">Default</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+        <option value="title-asc">Name: A → Z</option>
+        <option value="title-desc">Name: Z → A</option>
+        <option value="newest">Newest</option>
+      </select>
+      <span class="custom-arrow">▼</span>
+    </div>
+  </div>
+
+  <div class="filter-customisable">
+    <input type="checkbox" id="filter-customisable">
+    <label for="filter-customisable">Show only customisable</label>
+  </div>
+</div>
+
+
+
 
     <div class="products-grid" id="products-grid">
       <!-- JS will inject product cards here -->
