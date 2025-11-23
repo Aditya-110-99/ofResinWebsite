@@ -364,7 +364,7 @@ body {
 
 .hero p {
   font-size: 18px;
-  color: var(--muted);
+  color:#000000;
   max-width: 760px;
   margin: 0 auto 18px;
   text-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
