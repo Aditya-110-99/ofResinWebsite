@@ -4,28 +4,113 @@
 const WHATSAPP_PHONE = '919012338933';
 
 /* --------------------------------------
-   THEME / NIGHT MODE (GLOBAL)
+   THEME / NIGHT MODE
 ---------------------------------------*/
-function applyTheme(theme) {
-    if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+function applyTheme(theme){
+    if(theme==='dark') document.documentElement.setAttribute('data-theme','dark');
     else document.documentElement.removeAttribute('data-theme');
 }
 
 const savedTheme = localStorage.getItem('ofresin_theme');
-applyTheme(savedTheme || 'dark');
+applyTheme(savedTheme||'dark');
 
 const themeBtn = document.getElementById('theme-toggle');
-if (themeBtn) {
-    themeBtn.textContent = document.documentElement.hasAttribute('data-theme') ? '☀️' : '🌓';
-    themeBtn.addEventListener('click', () => {
+if(themeBtn){
+    themeBtn.textContent = document.documentElement.hasAttribute('data-theme')?'☀️':'🌓';
+    themeBtn.addEventListener('click',()=>{
         const isDark = document.documentElement.hasAttribute('data-theme');
-        const newTheme = isDark ? 'light' : 'dark';
+        const newTheme = isDark?'light':'dark';
         applyTheme(newTheme);
         localStorage.setItem('ofresin_theme', newTheme);
-        themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌓';
+        themeBtn.textContent = newTheme==='dark'?'☀️':'🌓';
     });
 }
 
+/* --------------------------------------
+   CART UTILITIES
+---------------------------------------*/
+function loadCart(){ return JSON.parse(localStorage.getItem('ofresin_cart')||'[]'); }
+function saveCart(cart){ localStorage.setItem('ofresin_cart', JSON.stringify(cart)); updateCartCount(); }
+
+function updateCartCount(){
+    const cart = loadCart();
+    const count = cart.reduce((sum,i)=>sum+i.qty,0);
+    [document.getElementById('cart-count'), document.getElementById('cart-count-2')].forEach(e=>{ if(e) e.textContent=count; });
+}
+
+function addToCart(productId){
+    const cart = loadCart();
+    const item = cart.find(i=>i.id===productId);
+    if(item) item.qty += 1;
+    else cart.push({id:productId, qty:1});
+    saveCart(cart);
+    if(typeof renderCart === 'function') renderCart();
+    
+    const product = PRODUCTS.find(p => p.id === productId);
+    if(product) showToast(`${product.title} added to cart ✅`);
+}
+
+
+function removeCartItem(productId){
+    let cart = loadCart();
+    cart = cart.filter(i=>i.id!==productId);
+    saveCart(cart);
+    renderCart();
+}
+
+function clearCart(){
+    localStorage.removeItem('ofresin_cart');
+    renderCart();
+    updateCartCount();
+}
+
+function changeQty(productId, qty){
+    const cart = loadCart();
+    const item = cart.find(i=>i.id===productId);
+    if(!item) return;
+    item.qty = qty;
+    if(item.qty<=0) removeCartItem(productId);
+    else saveCart(cart);
+    renderCart();
+}
+
+/* --------------------------------------
+   RENDER CART
+---------------------------------------*/
+function renderCart(){
+    const cartEl = document.getElementById('cart-items');
+    if(!cartEl) return;
+    const cart = loadCart();
+    cartEl.innerHTML = '';
+    let total = 0;
+
+    cart.forEach(item=>{
+        const p = PRODUCTS.find(x=>x.id===item.id);
+        const line = p.price*item.qty;
+        total+=line;
+
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+            <span class="cart-title">${p.title}</span>
+            <span class="cart-qty">
+                <button class="qty-btn" onclick="changeQty('${p.id}', ${item.qty-1})">-</button>
+                ${item.qty}
+                <button class="qty-btn" onclick="changeQty('${p.id}', ${item.qty+1})">+</button>
+            </span>
+            <span class="cart-price">₹${line}</span>
+            <button class="cart-remove" onclick="removeCartItem('${p.id}')">×</button>
+        `;
+        cartEl.appendChild(div);
+    });
+
+    const totalEl = document.getElementById('cart-total');
+    if(totalEl) totalEl.textContent = '₹'+total;
+}
+
+/* --------------------------------------
+   PRODUCT CATALOG (Use your PRODUCTS array)
+---------------------------------------*/
 
 /* --------------------------------------
    PRODUCT CATALOG
@@ -159,97 +244,30 @@ const PRODUCTS = [
         }
     }
 ];
+function showToast(message){
+    const toast = document.getElementById('toast');
+    if(!toast) return;
+    
+    toast.textContent = message;
+    toast.style.opacity = '1';
+    toast.style.right = '20px'; // slide in
 
-
-/* --------------------------------------
-   CART UTILITIES
----------------------------------------*/
-function loadCart() { return JSON.parse(localStorage.getItem('ofresin_cart') || '[]'); }
-function saveCart(cart) { localStorage.setItem('ofresin_cart', JSON.stringify(cart)); updateCartCount(); }
-
-function updateCartCount() {
-    const cart = loadCart();
-    const count = cart.reduce((sum, i) => sum + i.qty, 0);
-    [document.getElementById('cart-count'), document.getElementById('cart-count-2')].forEach(e => { if(e) e.textContent = count; });
+    setTimeout(()=>{
+        toast.style.right = '-300px'; // slide out
+        toast.style.opacity = '0';
+    }, 2000); // visible for 2 seconds
 }
 
-function addToCart(productId) {
-    const cart = loadCart();
-    const item = cart.find(i => i.id === productId);
-    if(item) item.qty += 1;
-    else cart.push({ id: productId, qty: 1 });
-    saveCart(cart);
-    showToast('Added to cart', 'Undo', () => undoAdd(productId));
-    trackEvent('add_to_cart', { productId });
-    if(typeof renderCart === 'function') renderCart();
-}
 
-function undoAdd(productId) {
-    const cart = loadCart();
-    const item = cart.find(i => i.id === productId);
-    if(!item) return;
-    item.qty -= 1;
-    if(item.qty <= 0) cart.splice(cart.indexOf(item), 1);
-    saveCart(cart);
-    if(typeof renderCart === 'function') renderCart();
-}
-
-function removeCartItem(productId) {
-    let cart = loadCart();
-    cart = cart.filter(i => i.id !== productId);
-    saveCart(cart);
-    renderCart();
-}
-
-function clearCart() { localStorage.removeItem('ofresin_cart'); renderCart(); updateCartCount(); }
-
-function changeQty(productId, qty) {
-    const cart = loadCart();
-    const item = cart.find(i => i.id === productId);
-    if(!item) return;
-    item.qty = qty;
-    if(item.qty <= 0) removeCartItem(productId);
-    else saveCart(cart); renderCart();
-}
-
-/* --------------------------------------
-   ANALYTICS
----------------------------------------*/
-function loadAnalytics() { return JSON.parse(localStorage.getItem('ofresin_analytics') || '{"events":[], "counters":{}}'); }
-function saveAnalytics(a) { localStorage.setItem('ofresin_analytics', JSON.stringify(a)); }
-
-function trackEvent(name, payload) {
-    const now = new Date().toISOString();
-    const a = loadAnalytics();
-    a.counters[name] = (a.counters[name] || 0) + 1;
-    a.events.push({ event: name, payload: payload || null, ts: now });
-    if(a.events.length > 1000) a.events = a.events.slice(-1000);
-    saveAnalytics(a);
-}
-
-function exportAnalytics() {
-    const a = loadAnalytics();
-    const blob = new Blob([JSON.stringify(a, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const aLink = document.createElement('a');
-    aLink.href = url;
-    aLink.download = `ofresin-analytics-${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.json`;
-    document.body.appendChild(aLink); aLink.click(); document.body.removeChild(aLink);
-    URL.revokeObjectURL(url);
-}
-
-/* --------------------------------------
-   PRODUCT RENDER + SORT + FILTER
----------------------------------------*/
-function renderProducts(sortBy='default', filterCustomisable=false) {
+function renderProducts(sortBy='default', filterCustomisable=false){
     const grid = document.getElementById('products-grid');
     if(!grid) return;
-    grid.innerHTML = '';
+    grid.innerHTML='';
 
     let productsToRender = [...PRODUCTS];
-    if(filterCustomisable) productsToRender = productsToRender.filter(p => p.customisable);
+    if(filterCustomisable) productsToRender = productsToRender.filter(p=>p.customisable);
 
-    switch(sortBy) {
+    switch(sortBy){
         case 'price-asc': productsToRender.sort((a,b)=>a.price-b.price); break;
         case 'price-desc': productsToRender.sort((a,b)=>b.price-a.price); break;
         case 'title-asc': productsToRender.sort((a,b)=>a.title.localeCompare(b.title)); break;
@@ -257,22 +275,18 @@ function renderProducts(sortBy='default', filterCustomisable=false) {
         case 'newest': productsToRender.sort((a,b)=>b.id.localeCompare(a.id)); break;
     }
 
-    productsToRender.forEach(p => {
+    productsToRender.forEach(p=>{
         const div = document.createElement('div'); div.className='product-card';
 
         const imgWrap = document.createElement('div'); imgWrap.className='product-image-wrap'; imgWrap.style.position='relative';
+        const img = document.createElement('img'); img.src=p.img; img.alt=p.title; img.className='product-img';
+        imgWrap.appendChild(img); div.appendChild(imgWrap);
 
         if(p.customisable){
             const badge = document.createElement('div'); badge.className='tag-customise';
-            const icon = document.createElement('i'); icon.className='mdi mdi-tools'; badge.appendChild(icon);
-            const textWrapper = document.createElement('div'); textWrapper.className='snake-text';
-            "Customisable".split('').forEach(c => { const span = document.createElement('span'); span.textContent=c; textWrapper.appendChild(span); });
-            badge.appendChild(textWrapper); imgWrap.appendChild(badge);
+            badge.textContent='Customisable';
+            imgWrap.appendChild(badge);
         }
-
-        const img = document.createElement('img'); img.src=p.img; img.alt=p.title; img.className='product-img';
-        img.addEventListener('click', ()=>{ openProductModal(p.id); trackEvent('product_view',{productId:p.id}); });
-        imgWrap.appendChild(img); div.appendChild(imgWrap);
 
         const title = document.createElement('div'); title.className='product-title'; title.textContent=p.title;
         const price = document.createElement('div'); price.className='price'; price.textContent='₹'+p.price;
@@ -295,7 +309,6 @@ function buyNow(productId){
     if(!product) return;
     const msg = encodeURIComponent(`Hello! I want to buy:\n\n*${product.title}*\nPrice: ₹${product.price}\n\nPlease confirm availability.`);
     window.location.href=`https://wa.me/${WHATSAPP_PHONE}?text=${msg}`;
-    trackEvent('buy_now',{productId});
 }
 
 function checkout(){
@@ -306,24 +319,21 @@ function checkout(){
     cart.forEach(item=>{ const p=PRODUCTS.find(x=>x.id===item.id); const line=p.price*item.qty; total+=line; message+=`• ${p.title} (×${item.qty}) — ₹${line}\n`; });
     message+=`\n*Total:* ₹${total}\n\nPlease confirm availability.`;
     window.location.href=`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
-    trackEvent('checkout',{cart});
 }
 
 /* --------------------------------------
-   INITIALIZE UI
+   INITIALIZE
 ---------------------------------------*/
-document.addEventListener('DOMContentLoaded', ()=>{
+document.addEventListener('DOMContentLoaded',()=>{
     renderProducts();
+    renderCart();
     updateCartCount();
-    if(typeof renderCart === 'function') renderCart();
 
     const sortSelect = document.getElementById('sort-products');
     const filterCheckbox = document.getElementById('filter-customisable');
-    if(sortSelect) sortSelect.addEventListener('change', ()=>renderProducts(sortSelect.value, filterCheckbox.checked));
-    if(filterCheckbox) filterCheckbox.addEventListener('change', ()=>renderProducts(sortSelect.value, filterCheckbox.checked));
+    if(sortSelect) sortSelect.addEventListener('change',()=>renderProducts(sortSelect.value, filterCheckbox.checked));
+    if(filterCheckbox) filterCheckbox.addEventListener('change',()=>renderProducts(sortSelect.value, filterCheckbox.checked));
 
     const buyBtn = document.getElementById('buy-whatsapp'); if(buyBtn) buyBtn.addEventListener('click', checkout);
     const clearBtn = document.getElementById('clear-cart'); if(clearBtn) clearBtn.addEventListener('click', ()=>{ if(confirm('Clear cart?')) clearCart(); });
-    const navToggle = document.getElementById('nav-toggle'); if(navToggle) navToggle.addEventListener('click', ()=>{ document.querySelector('.site-header').classList.toggle('nav-open'); });
-    const exportBtn = document.getElementById('export-analytics'); if(exportBtn) exportBtn.addEventListener('click', (e)=>{ e.preventDefault(); exportAnalytics(); });
 });
