@@ -4,6 +4,7 @@
 const WHATSAPP_PHONE = '919012338933';
 
 
+
 /* --------------------------------------
    THEME / NIGHT MODE
 ---------------------------------------*/
@@ -118,6 +119,7 @@ function renderCart(){
 ---------------------------------------*/
 
 const PRODUCTS = [
+<<<<<<< HEAD
     { id: 'p1', title: 'Custom Silver Resin Jhumka', price: 299, img: 'images/prod1.svg', description: 'Hand-poured silver-tone jhumka with preserved flowers embedded in crystal-clear resin. Lightweight and hypoallergenic.', meta:{material:'Resin & Alloy', size:'3.2cm × 2.5cm', sku:'OF-P1'} },
     { id: 'p2', title: 'Resin Bookmark — Floral', price: 149, img: 'images/prod2.svg', description: 'Slim resin bookmark with pressed florals and gold leaf accents — perfect for book lovers.', meta:{material:'Resin, Dried Flowers', size:'15cm × 4cm', sku:'OF-P2'} },
     { id: 'p3', title: 'Resin Keyring — Initial', price: 99, img: 'images/prod3.svg', description: 'Personalized initial keyring encased in glossy resin. Add a charm or color on request.', meta:{material:'Resin, Metal Ring', size:'4cm × 3cm', sku:'OF-P3'} },
@@ -139,12 +141,31 @@ const PRODUCTS = [
                   sku: 'OF-P1'
  } 
                 },
+=======
+    {
+        id: 'p1',
+        title: 'Custom Floral Resin Jhumka',
+        price: 500,
+        img: 'images/prod1.png',
+        customisable: true,
+        description: 'Hand-poured Floral jhumka with real preserved flowers embedded in crystal-clear resin. Lightweight and hypoallergenic.',
+        meta: {
+            material: 'Resin & Alloy',
+            size: '4.2cm × 4.2cm',
+            sku: 'OF-P1'
+        }
+    },
+>>>>>>> df73553 (updated the site)
     {
         id: 'p2',
         title: 'Resin Bookmark — Black & Gold Gradient',
         price: 350,
         img: 'images/prod2.png',
+<<<<<<< HEAD
        
+=======
+
+>>>>>>> df73553 (updated the site)
         description: 'A sleek black-to-clear gradient bookmark with shimmering golden foil suspended inside — a minimal, elegant accessory that adds a touch of luxury to every reader’s journey.',
         meta: {
             material: 'Resin, Golden Foil',
@@ -267,18 +288,18 @@ const PRODUCTS = [
    - Use `Export Analytics` button to download JSON
    - Privacy: data stays in user's browser unless exported/shared
 ---------------------------------------*/
-function loadAnalytics(){
-    try{
+function loadAnalytics() {
+    try {
         const raw = localStorage.getItem('ofresin_analytics');
         return raw ? JSON.parse(raw) : { events: [], counters: {} };
-    }catch(e){ return { events: [], counters: {} }; }
+    } catch (e) { return { events: [], counters: {} }; }
 }
 
-function saveAnalytics(a){
-    try{ localStorage.setItem('ofresin_analytics', JSON.stringify(a)); }catch(e){}
+function saveAnalytics(a) {
+    try { localStorage.setItem('ofresin_analytics', JSON.stringify(a)); } catch (e) { }
 }
 
-function trackEvent(name, payload){
+function trackEvent(name, payload) {
     const now = new Date().toISOString();
     const a = loadAnalytics();
     a.counters[name] = (a.counters[name] || 0) + 1;
@@ -290,13 +311,13 @@ function trackEvent(name, payload){
     if (window.console && console.debug) console.debug('[analytics]', name, payload || '');
 }
 
-function exportAnalytics(){
+function exportAnalytics() {
     const a = loadAnalytics();
     const blob = new Blob([JSON.stringify(a, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const aLink = document.createElement('a');
     aLink.href = url;
-    aLink.download = `ofresin-analytics-${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.json`;
+    aLink.download = `ofresin-analytics-${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.json`;
     document.body.appendChild(aLink);
     aLink.click();
     document.body.removeChild(aLink);
@@ -348,23 +369,23 @@ function addToCart(productId) {
     }
 }
 
-function undoAdd(productId){
+function undoAdd(productId) {
     const cart = loadCart();
     const item = cart.find(i => i.id === productId);
     if (!item) return; // nothing to undo
     item.qty -= 1;
     if (item.qty <= 0) {
-        const idx = cart.findIndex(i=>i.id===productId);
-        if (idx !== -1) cart.splice(idx,1);
+        const idx = cart.findIndex(i => i.id === productId);
+        if (idx !== -1) cart.splice(idx, 1);
     }
     saveCart(cart);
     if (typeof renderCart === 'function') renderCart();
 }
 
 /* Toast helpers */
-function ensureToastContainer(){
+function ensureToastContainer() {
     let container = document.querySelector('.toast-container');
-    if (!container){
+    if (!container) {
         container = document.createElement('div');
         container.className = 'toast-container';
         document.body.appendChild(container);
@@ -372,14 +393,14 @@ function ensureToastContainer(){
     return container;
 }
 
-function showToast(message, actionText, actionFn, timeout=3500){
+function showToast(message, actionText, actionFn, timeout = 3500) {
     const container = ensureToastContainer();
     const t = document.createElement('div');
     t.className = 'toast';
     t.innerHTML = `<div class="msg">${message}</div>`;
     const actions = document.createElement('div');
     actions.className = 'actions';
-    if (actionText && actionFn){
+    if (actionText && actionFn) {
         const btn = document.createElement('button');
         btn.textContent = actionText;
         btn.onclick = () => { actionFn(); container.removeChild(t); };
@@ -393,7 +414,7 @@ function showToast(message, actionText, actionFn, timeout=3500){
     t.appendChild(actions);
     container.appendChild(t);
 
-    setTimeout(()=>{ if (t.parentNode) t.parentNode.removeChild(t); }, timeout);
+    setTimeout(() => { if (t.parentNode) t.parentNode.removeChild(t); }, timeout);
 }
 
 function clearCart() {
@@ -548,7 +569,7 @@ function buyNow(productId) {
 
     window.location.href = `https://wa.me/${WHATSAPP_PHONE}?text=${msg}`;
     // analytics - record intent to buy single product
-    try{ trackEvent('buy_now', { productId }); }catch(e){}
+    try { trackEvent('buy_now', { productId }); } catch (e) { }
 }
 
 
@@ -584,11 +605,15 @@ function checkout(){
 
     window.location.href = `https://wa.me/${WHATSAPP_PHONE}?text=${encoded}`;
     // analytics - record full cart checkout attempt
+<<<<<<< HEAD
     try{ trackEvent('checkout', { cart }); }catch(e){}
     let total=0;
     cart.forEach(item=>{ const p=PRODUCTS.find(x=>x.id===item.id); const line=p.price*item.qty; total+=line; message+=`• ${p.title} (×${item.qty}) — ₹${line}\n`; });
     message+=`\n*Total:* ₹${total}\n\nPlease confirm availability.`;
     window.location.href=`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
+=======
+    try { trackEvent('checkout', { cart }); } catch (e) { }
+>>>>>>> df73553 (updated the site)
 }
 
 /* --------------------------------------
@@ -599,61 +624,102 @@ function renderProducts() {
     const grid = document.getElementById('products-grid');
     if (!grid) return;
     grid.innerHTML = '';
+
     PRODUCTS.forEach(p => {
         const div = document.createElement('div');
         div.className = 'product-card';
 
+        // Image wrapper for badge
+        const imgWrap = document.createElement('div');
+        imgWrap.className = 'product-image-wrap';
+        imgWrap.style.position = 'relative';
+
+        // Customisable badge — only for products with customisable: true
+        // Customisable badge — only for products with customisable: true
+        if (p.customisable) {
+            const badge = document.createElement('div');
+            badge.className = 'tag-customise';
+
+            // Icon
+            const icon = document.createElement('i');
+            icon.className = 'mdi mdi-tools';
+            badge.appendChild(icon);
+
+            // Text container
+            const textWrapper = document.createElement('div');
+            textWrapper.className = 'snake-text';
+
+            const text = "Customisable";
+            text.split('').forEach(char => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                textWrapper.appendChild(span);
+            });
+
+            badge.appendChild(textWrapper);
+            imgWrap.appendChild(badge);
+        }
+
+
+        // Product image
         const img = document.createElement('img');
         img.src = p.img;
         img.alt = p.title;
-        // open product modal when image or card clicked
-        img.addEventListener('click', ()=>{ openProductModal(p.id); try{ trackEvent('product_view', { productId: p.id }); }catch(e){} });
-        div.addEventListener('click', (e)=>{
-            // avoid triggering when clicking buttons inside card
-            if (e.target.tagName.toLowerCase() === 'button') return;
+        img.className = 'product-img';
+        img.addEventListener('click', () => {
             openProductModal(p.id);
+            try { trackEvent('product_view', { productId: p.id }); } catch (e) { }
         });
 
+        imgWrap.appendChild(img); // add image after badge
+        div.appendChild(imgWrap);
+
+        // Product title
         const title = document.createElement('div');
         title.className = 'product-title';
         title.textContent = p.title;
 
+        // Product price
         const price = document.createElement('div');
         price.className = 'price';
         price.textContent = '₹' + p.price;
 
+        // Add to Cart button
         const addBtn = document.createElement('button');
         addBtn.className = 'btn';
         addBtn.textContent = 'Add to Cart';
-        addBtn.setAttribute('title','Add to Cart');
-        addBtn.setAttribute('aria-label','Add to Cart');
         addBtn.onclick = () => addToCart(p.id);
 
+        // Buy on WhatsApp button
         const buyBtn = document.createElement('button');
         buyBtn.className = 'btn btn-primary';
         buyBtn.textContent = 'Buy on WhatsApp';
-        buyBtn.setAttribute('title','Buy on WhatsApp');
-        buyBtn.setAttribute('aria-label','Buy on WhatsApp');
         buyBtn.onclick = () => buyNow(p.id);
 
-        // actions container keeps buttons aligned at the card footer
+        // Actions container
         const actions = document.createElement('div');
         actions.className = 'product-actions';
         actions.appendChild(addBtn);
         actions.appendChild(buyBtn);
 
-        div.appendChild(img);
+        // Append all to product card
         div.appendChild(title);
         div.appendChild(price);
         div.appendChild(actions);
 
+        // Add card to grid
         grid.appendChild(div);
+
+
     });
+
+
 }
 
+
 /* Product modal: shows title, image, description, meta and actions */
-function openProductModal(productId){
-    const p = PRODUCTS.find(x=>x.id===productId);
+function openProductModal(productId) {
+    const p = PRODUCTS.find(x => x.id === productId);
     if (!p) return;
 
     // prevent multiple modals
@@ -663,8 +729,8 @@ function openProductModal(productId){
 
     const modal = document.createElement('div');
     modal.className = 'product-modal';
-    modal.setAttribute('role','dialog');
-    modal.setAttribute('aria-modal','true');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
     modal.setAttribute('aria-labelledby', `pm-title-${p.id}`);
     modal.innerHTML = `
         <button class="pm-close" aria-label="Close">✕</button>
@@ -698,22 +764,22 @@ function openProductModal(productId){
     const previouslyFocused = document.activeElement;
     const closeBtn = modal.querySelector('.pm-close');
     const focusableSelector = 'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),[tabindex]:not([tabindex="-1"])';
-    function getFocusable(){ return Array.from(modal.querySelectorAll(focusableSelector)).filter(el=>el.offsetParent!==null); }
+    function getFocusable() { return Array.from(modal.querySelectorAll(focusableSelector)).filter(el => el.offsetParent !== null); }
     // open animation
-    requestAnimationFrame(()=> modal.classList.add('pm-open'));
+    requestAnimationFrame(() => modal.classList.add('pm-open'));
     // move focus into modal
     const focusable = getFocusable();
     (focusable[0] || closeBtn).focus();
 
-    function onKey(e){
+    function onKey(e) {
         if (e.key === 'Escape') { e.preventDefault(); startClose(); }
-        if (e.key === 'Tab'){
+        if (e.key === 'Tab') {
             const nodes = getFocusable();
             if (nodes.length === 0) { e.preventDefault(); return; }
             const first = nodes[0];
-            const last = nodes[nodes.length-1];
-            if (e.shiftKey){ if (document.activeElement === first){ e.preventDefault(); last.focus(); } }
-            else { if (document.activeElement === last){ e.preventDefault(); first.focus(); } }
+            const last = nodes[nodes.length - 1];
+            if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+            else { if (document.activeElement === last) { e.preventDefault(); first.focus(); } }
         }
     }
     document.addEventListener('keydown', onKey);
@@ -721,26 +787,26 @@ function openProductModal(productId){
     overlay.addEventListener('click', startClose);
     closeBtn.addEventListener('click', startClose);
 
-    function startClose(){
+    function startClose() {
         // add closing class to animate out
         modal.classList.remove('pm-open');
         modal.classList.add('pm-closing');
         overlay.classList.add('pm-fade-out');
         document.removeEventListener('keydown', onKey);
         // cleanup after transition or timeout fallback
-        const done = ()=>{
+        const done = () => {
             if (modal.parentNode) modal.parentNode.removeChild(modal);
             if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
             document.documentElement.style.overflow = prevOverflow || '';
             if (previouslyFocused && typeof previouslyFocused.focus === 'function') previouslyFocused.focus();
         };
-        modal.addEventListener('transitionend', done, { once:true });
+        modal.addEventListener('transitionend', done, { once: true });
         setTimeout(done, 350);
     }
 
     // actions
-    modal.querySelector('.add-cart').addEventListener('click', ()=>{ addToCart(p.id); startClose(); });
-    modal.querySelector('.buy-now').addEventListener('click', ()=>{ buyNow(p.id); startClose(); });
+    modal.querySelector('.add-cart').addEventListener('click', () => { addToCart(p.id); startClose(); });
+    modal.querySelector('.buy-now').addEventListener('click', () => { buyNow(p.id); startClose(); });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -757,37 +823,37 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     // mobile nav toggle
     const navToggle = document.getElementById('nav-toggle');
-    if (navToggle){
-        navToggle.addEventListener('click', ()=>{
+    if (navToggle) {
+        navToggle.addEventListener('click', () => {
             document.querySelector('.site-header').classList.toggle('nav-open');
         });
     }
     // export analytics button
     const exportBtn = document.getElementById('export-analytics');
-    if (exportBtn){
-        exportBtn.addEventListener('click', (e)=>{ e.preventDefault(); exportAnalytics(); });
+    if (exportBtn) {
+        exportBtn.addEventListener('click', (e) => { e.preventDefault(); exportAnalytics(); });
     }
     // theme toggle
-    function applyTheme(t){
-        if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+    function applyTheme(t) {
+        if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
         else document.documentElement.removeAttribute('data-theme');
     }
 
     // prefer saved theme or system preference
-        const savedTheme = localStorage.getItem('ofresin_theme');
-        if (savedTheme) {
-            applyTheme(savedTheme);
-        } else {
-            // Make dark theme the primary/default when no saved preference exists
-            applyTheme('dark');
-            try { localStorage.setItem('ofresin_theme','dark'); } catch(e){}
-        }
+    const savedTheme = localStorage.getItem('ofresin_theme');
+    if (savedTheme) {
+        applyTheme(savedTheme);
+    } else {
+        // Make dark theme the primary/default when no saved preference exists
+        applyTheme('dark');
+        try { localStorage.setItem('ofresin_theme', 'dark'); } catch (e) { }
+    }
 
     const themeBtn = document.getElementById('theme-toggle');
-    if (themeBtn){
+    if (themeBtn) {
         // set initial label
         themeBtn.textContent = document.documentElement.hasAttribute('data-theme') ? '☀️' : '🌓';
-        themeBtn.addEventListener('click', ()=>{
+        themeBtn.addEventListener('click', () => {
             const isDark = document.documentElement.hasAttribute('data-theme');
             const newTheme = isDark ? 'light' : 'dark';
             applyTheme(newTheme);
@@ -799,12 +865,12 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 
 /* Layered parallax: `.parallax-bg` (far) + `.parallax-mid` (mid) */
-(function(){
+(function () {
     const MIN_WIDTH = 720; // disable on small screens
     const BG_MULT = 0.28;  // far layer moves slower
     const MID_MULT = 0.45; // mid layer moves faster for depth
 
-    function initParallax(){
+    function initParallax() {
         const far = document.querySelector('.parallax-bg');
         const mid = document.querySelector('.parallax-mid');
         if (!far && !mid) return;
