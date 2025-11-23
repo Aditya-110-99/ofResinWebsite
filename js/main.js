@@ -272,6 +272,104 @@ function undoAdd(productId) {
     if (typeof renderCart === 'function') renderCart();
 }
 
+
+// --- Featured Products Carousel ---
+function renderFeaturedProducts() {
+    const carousel = document.getElementById('featured-products-carousel');
+    if (!carousel) return;
+    carousel.innerHTML = '';
+
+    // Example: feature first 6 products
+    const featured = PRODUCTS.slice(0, 6);
+    featured.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product-card';
+
+        div.innerHTML = `
+            <div class="product-image-wrap">
+                <img src="${p.img}" alt="${p.title}" class="product-img">
+            </div>
+            <div class="product-title">${p.title}</div>
+            <div class="price">₹${p.price}</div>
+            <div class="product-actions">
+                <button class="btn" onclick="addToCart('${p.id}')">Add to Cart</button>
+                <button class="btn btn-primary" onclick="buyNow('${p.id}')">Buy</button>
+            </div>
+        `;
+        carousel.appendChild(div);
+    });
+}
+
+function initCarousel() {
+    const track = document.querySelector('.carousel-track');
+    const prevBtn = document.querySelector('.carousel-btn.prev');
+    const nextBtn = document.querySelector('.carousel-btn.next');
+
+    let currentIndex = 0;
+    const cards = track.children;
+    const cardWidth = cards[0] ? cards[0].offsetWidth + 24 : 0; // card width + gap
+
+    function updateCarousel() {
+        track.style.transform = `translateX(${-currentIndex * cardWidth}px)`;
+    }
+
+    nextBtn.addEventListener('click', () => {
+        if (currentIndex < cards.length - 1) currentIndex++;
+        updateCarousel();
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) currentIndex--;
+        updateCarousel();
+    });
+
+    window.addEventListener('resize', () => {
+        // Recalculate cardWidth on resize
+        const newCardWidth = cards[0] ? cards[0].offsetWidth + 24 : 0;
+        updateCarousel();
+    });
+}
+
+
+function renderFeaturedProducts() {
+    const carousel = document.getElementById('featured-products-carousel');
+    if (!carousel) return;
+    carousel.innerHTML = '';
+
+    const featured = PRODUCTS.slice(0, 6); // first 6 products
+    featured.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product-card';
+        div.innerHTML = `
+            <div class="product-image-wrap">
+                <img src="${p.img}" alt="${p.title}" class="product-img">
+            </div>
+            <div class="product-title">${p.title}</div>
+            <div class="price">₹${p.price}</div>
+            <div class="product-actions">
+                <button class="btn" onclick="addToCart('${p.id}')">Add to Cart</button>
+                <button class="btn btn-primary" onclick="buyNow('${p.id}')">Buy</button>
+            </div>
+        `;
+        carousel.appendChild(div);
+    });
+}
+
+
+
+// Initialize carousel after DOM content loaded
+document.addEventListener('DOMContentLoaded', () => {
+    renderFeaturedProducts();
+    initCarousel();
+});
+
+
+// Call it on page load
+document.addEventListener('DOMContentLoaded', () => {
+    renderFeaturedProducts();
+});
+
+
 /* Toast helpers */
 function ensureToastContainer() {
     let container = document.querySelector('.toast-container');
